@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>단위 테스트 — F-01</title>
+<style>
+  body{font-family:system-ui,-apple-system,"Malgun Gothic",sans-serif;padding:24px;color:#16181d;}
+  h1{font-size:18px;}
+  .pass{color:#1f9254;font-weight:700;}
+  .fail{color:#d6394a;font-weight:700;}
+  table{border-collapse:collapse;margin-top:12px;width:100%;max-width:720px;}
+  td,th{border:1px solid #e6e8ec;padding:8px 10px;font-size:13px;text-align:left;}
+</style>
+</head>
+<body>
+<h1>단위 테스트(UT-01~03) — docs/qa_scenarios.md 기준</h1>
+<table id="out">
+  <tr><th>테스트 ID</th><th>대상 함수</th><th>입력</th><th>기대</th><th>실제</th><th>판정</th></tr>
+</table>
+
+<script src="app.js"></script>
+<script>
+  function row(id, fnName, inputText, actual, expected) {
+    const ok = actual === expected;
+    return `<tr>
+      <td>${id}</td><td>${fnName}</td><td>${inputText}</td>
+      <td>${expected}</td><td>${actual}</td>
+      <td class="${ok ? 'pass' : 'fail'}">${ok ? 'PASS' : 'FAIL'}</td>
+    </tr>`;
+  }
+
+  const rows = [
+    row("UT-01", "calcChangeRate(189, 37)", "before=189, after=37", calcChangeRate(189, 37), "-80.4%"),
+    row("UT-02", 'validateSelection("", "")', 'region="", gu=""', validateSelection("", ""), "지역을 선택해주세요"),
+    row("UT-03", 'validateSelection("부산", "")', 'region="부산", gu=""', validateSelection("부산", ""), "부산은 구까지 선택해주세요")
+  ];
+
+  document.getElementById("out").insertAdjacentHTML("beforeend", rows.join(""));
+</script>
+</body>
+</html>

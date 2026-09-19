@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>지역 비교 · F-01</title>
+<style>
+  :root{
+    --ink:#16181d; --sub:#5b6270; --line:#e6e8ec; --bg:#ffffff;
+    --accent:#2455ff; --accent-bg:#eef2ff; --down:#d6394a; --up:#1f9254;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",Helvetica,dotum,sans-serif;
+    color:var(--ink); background:var(--bg); line-height:1.55; letter-spacing:-0.01em;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:32px 20px 60px;}
+  a.back{font-size:13px;color:var(--sub);text-decoration:none;}
+  h1{font-size:22px;font-weight:800;margin:16px 0 6px;letter-spacing:-0.02em;}
+  .lead{font-size:14px;color:var(--sub);margin:0 0 24px;}
+  .field{margin-bottom:14px;}
+  label{display:block;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+  select{
+    width:100%;padding:12px 14px;font-size:15px;border:1px solid var(--line);
+    border-radius:12px;background:#fff;color:var(--ink);
+  }
+  #gu-wrap{display:none;}
+  .error{display:none;color:var(--down);font-size:13px;font-weight:700;margin:-4px 0 14px;}
+  .btn{
+    width:100%;background:var(--accent);color:#fff;font-size:16px;font-weight:700;
+    padding:14px 0;border:none;border-radius:14px;cursor:pointer;margin-top:6px;
+  }
+  .btn:active{opacity:.85;}
+  #result{margin-top:28px;display:flex;flex-direction:column;gap:14px;}
+  .num-card{background:var(--accent-bg);border-radius:14px;padding:18px;}
+  .num-card.empty{background:#f6f7f9;}
+  .card-title{font-size:13px;font-weight:700;color:var(--sub);margin-bottom:6px;}
+  .num-card .big{font-size:26px;font-weight:800;margin-bottom:2px;}
+  .num-card .big.down{color:var(--down);}
+  .num-card .big.up{color:var(--up);}
+  .num-card .value{font-size:14px;color:var(--ink);}
+  .num-card .meta{font-size:12px;color:var(--sub);margin-top:6px;}
+  .num-card.empty .empty-msg{font-size:14px;color:var(--sub);}
+  .err-box{background:#fdecee;color:#8a1f2b;border-radius:14px;padding:14px;font-size:14px;}
+  .disclaimer{margin-top:32px;font-size:12px;color:var(--sub);background:#f6f7f9;border-radius:14px;padding:14px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./index.html">← 랜딩으로</a>
+  <h1>지역 선택 → 공식 지표 비교</h1>
+  <p class="lead">미분양·가격지수·초기분양률·5년 분양가 추이를 한 화면에서 비교합니다. 판단은 보여드리지 않습니다 — 숫자와 출처만 보여드립니다.</p>
+
+  <div class="field">
+    <label for="region">지역</label>
+    <select id="region">
+      <option value="">선택하세요</option>
+      <option value="서울">서울</option>
+      <option value="경기">경기</option>
+      <option value="부산">부산</option>
+    </select>
+  </div>
+
+  <div class="field" id="gu-wrap">
+    <label for="gu">구 (부산)</label>
+    <select id="gu">
+      <option value="">선택하세요</option>
+      <option value="해운대구">해운대구</option>
+      <option value="동래구">동래구</option>
+      <option value="연제구">연제구</option>
+      <option value="수영구">수영구</option>
+      <option value="남구">남구</option>
+    </select>
+  </div>
+
+  <div class="error" id="error-msg"></div>
+
+  <button class="btn" id="compare-btn" type="button">비교하기</button>
+
+  <div id="result"></div>
+
+  <div class="disclaimer">
+    교육용 참고 자료입니다. 공공데이터포털·한국부동산원·주택도시보증공사의 공식 통계이며, <b>투자·매수·대출 판단의 근거가 아닙니다.</b>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

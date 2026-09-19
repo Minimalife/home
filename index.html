@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>지역 부동산 지표 비교 · 수업 데모</title>
+<style>
+  :root{
+    --ink:#16181d;
+    --sub:#5b6270;
+    --line:#e6e8ec;
+    --bg:#ffffff;
+    --accent:#2455ff;
+    --accent-bg:#eef2ff;
+    --down:#d6394a;
+    --up:#1f9254;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",Helvetica,dotum,sans-serif;
+    color:var(--ink);
+    background:var(--bg);
+    line-height:1.55;
+    letter-spacing:-0.01em;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 20px;}
+  section{padding:56px 0;border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  h1{font-size:28px;line-height:1.35;margin:0 0 12px;font-weight:800;letter-spacing:-0.02em;}
+  h2{font-size:13px;letter-spacing:.04em;color:var(--accent);text-transform:uppercase;margin:0 0 10px;font-weight:700;}
+  h3{font-size:22px;margin:0 0 14px;font-weight:800;letter-spacing:-0.01em;}
+  p{color:var(--sub);margin:0 0 10px;}
+  .hero{
+    border-bottom:none;
+    border-radius:0 0 28px 28px;
+    padding:64px 20px 56px;
+    margin:0 0 8px;
+    background:linear-gradient(135deg,#1b2ee0 0%,var(--accent) 55%,#5b7dff 100%);
+  }
+  .hero-inner{max-width:760px;margin:0 auto;}
+  .hero h1{color:#fff;font-size:32px;}
+  .hero p{font-size:17px;color:#dbe2ff;}
+  .num-row{display:flex;gap:16px;flex-wrap:wrap;margin:20px 0;}
+  .num-card{flex:1;min-width:220px;background:var(--accent-bg);border-radius:14px;padding:20px;}
+  .badge{display:inline-block;font-size:11px;font-weight:700;color:var(--accent);background:#fff;border-radius:999px;padding:4px 10px;margin-bottom:10px;}
+  .num-card .big{font-size:30px;font-weight:800;color:var(--ink);}
+  .num-card .down{color:var(--down);}
+  .num-card .up{color:var(--up);}
+  .num-card .meta{font-size:12px;color:var(--sub);margin-top:6px;}
+  .bars{display:flex;align-items:flex-end;gap:10px;height:120px;margin:18px 0 6px;}
+  .bar{flex:1;background:var(--accent);border-radius:6px 6px 0 0;position:relative;display:flex;align-items:flex-end;justify-content:center;color:#fff;font-size:12px;font-weight:700;padding-bottom:4px;}
+  .bar.small{background:#c8d3ff;color:var(--sub);}
+  .bar-label{display:flex;gap:10px;font-size:12px;color:var(--sub);}
+  .bar-label span{flex:1;text-align:center;}
+  .note{font-size:13px;color:var(--sub);border-left:3px solid var(--accent);padding-left:12px;margin-top:16px;}
+  .limit{font-size:13px;color:#8a1f2b;background:#fdecee;border-radius:14px;padding:10px 14px;margin-top:8px;}
+  .persona-card{background:#f6f7f9;border-radius:14px;padding:22px;}
+  .persona-card b{color:var(--ink);}
+  .quote{font-style:italic;color:var(--ink);border-left:3px solid var(--accent);padding-left:12px;margin-top:14px;}
+  .low-point{background:#fdecee;border-radius:14px;padding:12px 14px;margin-top:14px;font-size:14px;}
+  .cta-wrap{text-align:center;padding:40px 0;}
+  .btn{
+    display:inline-block;
+    background:var(--accent);
+    color:#fff;
+    font-size:17px;
+    font-weight:700;
+    padding:16px 36px;
+    border-radius:14px;
+    text-decoration:none;
+  }
+  .btn.disabled{background:#c8ccd6;color:#6d7280;cursor:default;}
+  .cta-sub{font-size:13px;color:var(--sub);margin-top:10px;}
+  ul{color:var(--sub);padding-left:20px;}
+  li{margin-bottom:8px;}
+  footer{padding:24px 0 56px;text-align:center;}
+  .disclaimer{font-size:12px;color:var(--sub);background:#f6f7f9;border-radius:14px;padding:14px;}
+  .aida-tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.08em;color:#dbe2ff;background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;margin-bottom:14px;}
+  .flow{display:flex;align-items:center;gap:8px;margin:22px 0;flex-wrap:wrap;}
+  .flow-step{flex:1;min-width:150px;background:#f6f7f9;border-radius:14px;padding:16px;text-align:center;}
+  .flow-step.now{background:var(--accent-bg);}
+  .flow-step .step-label{font-size:11px;font-weight:700;color:var(--sub);margin-bottom:6px;}
+  .flow-step .step-title{font-size:15px;font-weight:800;}
+  .flow-arrow{color:var(--sub);font-size:20px;flex:0 0 auto;}
+  .trust-box{background:var(--accent-bg);border-radius:14px;padding:18px 20px;margin-top:8px;}
+  .trust-box .t-title{font-weight:800;font-size:14px;margin-bottom:6px;}
+
+  @media (max-width:480px){
+    .wrap{padding:0 16px;}
+    .hero{padding:48px 16px 40px;border-radius:0 0 22px 22px;}
+    .hero h1{font-size:24px;}
+    .hero p{font-size:15px;}
+    section{padding:40px 0;}
+    h3{font-size:19px;}
+    .num-row{flex-direction:column;}
+    .num-card{min-width:0;padding:18px;}
+    .num-card .big{font-size:26px;}
+    .bars{height:100px;gap:6px;}
+    .persona-card{padding:18px;}
+    .btn{width:100%;padding:16px 0;font-size:16px;}
+    .cta-wrap{padding:32px 0;}
+    .flow{flex-direction:column;}
+    .flow-arrow{transform:rotate(90deg);}
+  }
+</style>
+</head>
+<body>
+
+<!-- 한 줄 소개 -->
+<section class="hero">
+  <div class="hero-inner">
+    <span class="aida-tag">지금, 숫자로 보면</span>
+    <h1>수도권·부산, 지역마다 다른 부동산 숫자를<br>한 화면에서 비교하세요</h1>
+    <p>미분양·가격지수·초기분양률·5년 분양가 추이 — 공식 통계만 무료로 모아 보여줍니다. 매수 추천·가격 전망은 하지 않습니다.</p>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <!-- 데이터로 본 문제 -->
+  <section>
+    <h2>숫자로 먼저 봅니다</h2>
+    <h3>지역마다 흐름이 다릅니다</h3>
+    <div class="num-row">
+      <div class="num-card">
+        <span class="badge">부산 · 연제구</span>
+        <div class="big down">−80.4%</div>
+        <div>미분양(전용 60~85㎡)</div>
+        <div class="meta">189세대(2026-07) → 37세대(2026-08) · 부산광역시 연제구, 공공데이터포털</div>
+      </div>
+      <div class="num-card">
+        <span class="badge">서울</span>
+        <div class="big up">+88.1%</div>
+        <div>신규 민간아파트 분양가(㎡당)</div>
+        <div class="meta">9,983천원(2021-12) → 18,781천원(2026-07) · 주택도시보증공사, 공공데이터포털</div>
+      </div>
+    </div>
+
+    <p style="font-size:13px;font-weight:700;color:var(--ink);margin-top:24px;">부산 연제구 미분양 최근 4개월 (전용 60~85㎡, 세대)</p>
+    <div class="bars">
+      <div class="bar small" style="height:100%;">190</div>
+      <div class="bar small" style="height:100%;">190</div>
+      <div class="bar small" style="height:99%;">189</div>
+      <div class="bar" style="height:20%;">37</div>
+    </div>
+    <div class="bar-label"><span>05월</span><span>06월</span><span>07월</span><span>08월</span></div>
+
+    <p class="note">부산 연제구의 미분양은 최근 한 달 새 80% 넘게 줄었지만, 같은 기간 서울 분양가는 5년간 88% 넘게 올라 지역마다 다른 흐름을 보입니다.</p>
+    <p class="limit">이 숫자들은 지역·기간이 서로 달라 하나의 결론으로 단정할 수 없고, 감소 원인(실제 계약 증가 vs 집계 방식 변경)도 이 자료만으로는 알 수 없습니다.</p>
+  </section>
+
+  <!-- 누구의 어떤 순간 -->
+  <section>
+    <h2>이런 이야기, 낯설지 않다면</h2>
+    <h3>이서연·박준호 부부의 이야기</h3>
+    <div class="persona-card">
+      <p><b>30대 후반 맞벌이 직장인 부부.</b> 30대 초반 결혼 당시 부동산 지식과 대출이자 부담 능력에 대한 인지가 부족했고 주변에 조언해줄 어른도 없어, 신규분양(청약) 기회를 여러 번 놓치고 구축 아파트만 전전했습니다. 지금은 구축 아파트 대출 상환에 집중하고 있습니다.</p>
+      <p>월 지출(대출상환·쇼핑·고정지출)을 합쳐보니 소득과 거의 같다는 걸 실감한 순간, "지출은 이만큼 나가는데 다음 기회는 언제 오는지 몰라 대비를 못 하고 있다"는 불안을 느꼈습니다.</p>
+      <div class="low-point">😟 <b>가장 막막한 순간</b>: 지역을 고르고 미분양·가격지수·초기분양률·5년 추이를 한꺼번에 마주쳤을 때 — "이게 무슨 뜻인지, 그래서 지금이 기회인지" 판단할 실마리가 없었습니다.</div>
+      <p class="quote">"그때 누가 옆에서 하나라도 알려줬으면, 우리도 지금 이러고 있진 않았을 텐데."</p>
+    </div>
+  </section>
+
+  <!-- 왜 이 방법이 나은가 -->
+  <section>
+    <h2>그래서, 무엇이 달라지나요</h2>
+    <h3>이렇게 달라져요</h3>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="step-label">지금까지는</div>
+        <div class="step-title">청약홈, 우리 동네 사이트,<br>부동산 앱을 하나씩 따로 열어봄</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step now">
+        <div class="step-label">여기서는</div>
+        <div class="step-title">사는 지역만 고르면<br>필요한 숫자가 한 화면에 다 나옴</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="step-label">그 다음엔</div>
+        <div class="step-title">숫자를 보고<br>내가 직접 비교해서 판단</div>
+      </div>
+    </div>
+    <div class="trust-box">
+      <div class="t-title">🤔 왜 "지금이 기회다"라고 판단해주지 않나요?</div>
+      <p style="margin:0;">이 화면은 공식 통계만 보여줍니다. 매수 추천이나 가격 전망은 하지 않습니다 — 미분양·가격지수 같은 지표 자체가 애초에 그런 용도로 만들어진 숫자가 아니기 때문입니다(한국부동산원·HUG 원문에 명시). 판단은 사용자의 몫이고, 저희는 그 판단에 필요한 숫자를 정확하게, 출처와 함께 모아드리는 데 집중합니다.</p>
+    </div>
+  </section>
+
+  <!-- 지금 해볼 수 있는 것 -->
+  <section class="cta-wrap">
+    <span class="badge" style="color:var(--accent);">이제, 직접 확인해보세요</span>
+    <h3>내가 사는 지역, 어떤지 볼까요?</h3>
+    <p style="max-width:480px;margin:0 auto 24px;">서울·경기·부산(부산은 해운대·동래·연제·수영·남구까지) 중에서 고르면, 미분양·가격 흐름·분양 정보를 한 화면에서 바로 볼 수 있어요.</p>
+    <a class="btn" href="./app.html">지역 비교해보기</a>
+    <p class="cta-sub">아래에서 어떻게 테스트했는지도 보실 수 있어요</p>
+  </section>
+
+  <!-- 테스트 결과 (AIDA 외 보충 정보) -->
+  <section>
+    <h2>테스트 결과</h2>
+    <h3>세 가지 상황에서 잘 되는지 확인했어요</h3>
+    <p>① 지역을 고르면 그 지역 숫자가 제대로 나오는지 ② 아무것도 안 고르고 눌렀을 때 "지역을 선택해주세요"라고 알려주는지 ③ 부산만 고르고 동네(구)는 안 골랐을 때도 안내가 뜨는지 — 세 가지 모두 직접 눌러보고 확인했습니다.</p>
+    <p class="note">수업 과제로 만든 데모라, 최종 점검은 아직 진행 중입니다.</p>
+  </section>
+
+  <!-- 활용 방안 (AIDA 외 보충 정보) -->
+  <section>
+    <h2>앞으로 이렇게 넓혀갈 거예요</h2>
+    <h3>지금은 시작 단계예요</h3>
+    <ul>
+      <li><b>왜 믿을 수 있을까요</b>: 광고나 특정 매물을 밀어주지 않고, 정부·공공기관 통계만 보여드려요.</li>
+      <li><b>다음에 추가할 것</b>: 경기·부산 나머지 동네 정보 더하기, 예산·이사 시기를 스스로 정리하는 체크리스트, 관심 지역 저장 기능.</li>
+      <li><b>앞으로 확인할 것</b>: 실제로 사람들이 이 화면을 쓰고 도움이 됐다고 느끼는지 물어볼 예정이에요.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <div class="disclaimer">
+      수업 과제 데모입니다. 이 페이지의 숫자는 공공데이터포털·한국부동산원·주택도시보증공사의 공개 통계이며, 교육용 참고 자료입니다. <b>투자·매수·대출 판단의 근거가 아닙니다.</b>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
